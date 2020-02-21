@@ -11,21 +11,23 @@ import (
 )
 
 // Connection stores a connection with a SQL Database
-var Connection ExtendedDB
+var Connection extendedDB
 
 // Connect connects with the specified database
-func (db extendedDB) Connect(username, password, dataSource string) {
+func Connect(username, password, dataSource string) error {
 	connectionString := fmt.Sprintf("%s:%s@/%s", username, password, dataSource)
 	connection, err := sql.Open("mysql", connectionString)
 
 	if err != nil {
 		log.Fatalf("\nIt was not possible to connect with sql due to %v\n", err)
+		return err
 	}
 
-	Connection = ExtendedDB{
+	Connection = extendedDB{
 		connection: connection,
-		models: [],
 	}
 
 	log.Printf("Connection to database %s made successfully", strings.Split(connectionString, "/")[1])
+
+	return nil
 }
