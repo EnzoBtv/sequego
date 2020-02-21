@@ -4,32 +4,22 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"strings"
 
 	//Getting the mysql definitions
 	_ "github.com/go-sql-driver/mysql"
 )
 
-type modelOptions struct {
-	allowNull     bool
-	autoIncrement bool
-	columnType    string
-	primaryKey    bool
-}
-
-type model struct {
-	fields map[string]modelOptions
-}
-
 type extendedDB struct {
 	connection *sql.DB
-	models     []model
+	models     []Model
 }
 
 // Connection stores a connection with a SQL Database
 var Connection *sql.DB
 
 // Connect connects with the specified database
-func Connect(username, password, dataSource string) {
+func (db extendedDB) Connect(username, password, dataSource string) {
 	connectionString := fmt.Sprintf("%s:%s@/%s", username, password, dataSource)
 	connection, err := sql.Open("mysql", connectionString)
 
@@ -38,4 +28,6 @@ func Connect(username, password, dataSource string) {
 	}
 
 	Connection = connection
+
+	log.Printf("Connection to database %s made successfully", strings.Split(connectionString, "/")[1])
 }
