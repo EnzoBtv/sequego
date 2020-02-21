@@ -32,15 +32,12 @@ func Connect(username, password, dataSource string) error {
 	connection, err := sql.Open("mysql", connectionString)
 
 	if err != nil || connection == nil {
-		log.Fatalf("\nIt was not possible to connect with sql due to %v\n", err)
-		return err
+		return fmt.Errorf("\nIt was not possible to connect with sql due to %v\n", err)
 	}
 
 	Connection = extendedDB{
 		connection: connection,
 	}
-
-	log.Printf("Connection to database %s made successfully", strings.Split(connectionString, "/")[1])
 
 	return nil
 }
