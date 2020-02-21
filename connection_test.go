@@ -16,6 +16,9 @@ func TestConnect(t *testing.T) {
 		{user: "root", password: "root", dataSource: "sequego"},
 		{user: "root", password: "rot", dataSource: "sequego"},
 		{user: "root", password: "root", dataSource: "seque"},
+		{user: "", password: "root", dataSource: "seque"},
+		{user: "root", password: "", dataSource: "seque"},
+		{user: "root", password: "root", dataSource: ""},
 	}
 	for _, test := range tests {
 		testName := fmt.Sprintf("%s %s %s", test.user, test.password, test.dataSource)

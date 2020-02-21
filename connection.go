@@ -15,7 +15,20 @@ var Connection extendedDB
 
 // Connect connects with the specified database
 func Connect(username, password, dataSource string) error {
-	connectionString := fmt.Sprintf("%s:%s@/%s", username, password, dataSource)
+	if username == "" {
+		return fmt.Errorf("The username (first parameter) is required")
+	}
+	if dataSource == "" {
+		return fmt.Errorf("The datasource (third parameter) is required")
+	}
+
+	connectionString := fmt.Sprintf("%s", username)
+
+	if password != "" {
+		connectionString += ":" + password
+	}
+	connectionString += "@/" + dataSource
+
 	connection, err := sql.Open("mysql", connectionString)
 
 	if err != nil {
