@@ -31,7 +31,7 @@ func Connect(username, password, dataSource string) error {
 
 	connection, err := sql.Open("mysql", connectionString)
 
-	if err != nil {
+	if err != nil || connection == nil {
 		log.Fatalf("\nIt was not possible to connect with sql due to %v\n", err)
 		return err
 	}
