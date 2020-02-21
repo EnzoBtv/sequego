@@ -10,13 +10,8 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-type extendedDB struct {
-	connection *sql.DB
-	models     []Model
-}
-
 // Connection stores a connection with a SQL Database
-var Connection *sql.DB
+var Connection ExtendedDB
 
 // Connect connects with the specified database
 func (db extendedDB) Connect(username, password, dataSource string) {
@@ -27,7 +22,10 @@ func (db extendedDB) Connect(username, password, dataSource string) {
 		log.Fatalf("\nIt was not possible to connect with sql due to %v\n", err)
 	}
 
-	Connection = connection
+	Connection = ExtendedDB{
+		connection: connection,
+		models: [],
+	}
 
 	log.Printf("Connection to database %s made successfully", strings.Split(connectionString, "/")[1])
 }
