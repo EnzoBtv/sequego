@@ -1,13 +1,13 @@
 package sequego
 
 import (
-	"database/sql"
 	"fmt"
 
 	//Getting the mysql definitions
 	_ "github.com/go-sql-driver/mysql"
 )
 
+//ModelOptions defines how a SQL field can be
 type ModelOptions struct {
 	allowNull     bool
 	autoIncrement bool
@@ -26,7 +26,7 @@ func (table Model) CreateTable() error {
 	if Connection == nil || Connection.connection == nil {
 		return fmt.Errorf(`
 			The connection with the database was not initialized yet. 
-			Call sequego.Connect(username, password, dataSource) to create a Connection.`)
+			Call sequego.Connect(username, password, dataSource) to create a Connection`)
 	}
 
 	primaryKey := 0
@@ -40,7 +40,7 @@ func (table Model) CreateTable() error {
 		}
 
 		fieldDefinition := fmt.Sprintf("%s %s", field, definition.columnType)
-		
+
 		if !definition.allowNull {
 			fieldDefinition += " NOT NULL"
 		}
@@ -59,11 +59,11 @@ func (table Model) CreateTable() error {
 
 	fields += primaryKeyDefinition
 
-	Connection.connection.Prepare(
-		fmt.Sprintf(`
+	Connection.connection.Prepare(fmt.Sprintf(`
 			CREATE TABLE IF NOT EXISTS %s (
 				%s
 			);
-		`, table.name, fields)
-	)
+		`, table.name, fields))
+
+	return nil
 }
