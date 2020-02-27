@@ -59,11 +59,17 @@ func (table Model) CreateTable() error {
 
 	fields += primaryKeyDefinition
 
-	Connection.connection.Prepare(fmt.Sprintf(`
+	statement, err := Connection.connection.Prepare(fmt.Sprintf(`
 			CREATE TABLE IF NOT EXISTS %s (
 				%s
 			);
 		`, table.name, fields))
+
+	if err != nil {
+		return fmt.Errorf("It was not possible to create table due to %v", err)
+	}
+
+	statement.Exec()
 
 	return nil
 }
