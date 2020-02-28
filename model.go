@@ -7,14 +7,6 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-//ModelOptions defines how a SQL field can be
-type ModelOptions struct {
-	allowNull     bool
-	autoIncrement bool
-	columnType    string
-	primaryKey    bool
-}
-
 //Model defines a SQL table and it fields
 type Model struct {
 	fields map[string]ModelOptions
@@ -38,23 +30,14 @@ func (table Model) CreateTable() error {
 		if primaryKey > 1 {
 			return fmt.Errorf("It was not possible to create table due to more than one primary key defined")
 		}
+		parsedField := parseFields(field, definition)
 
-		fieldDefinition := fmt.Sprintf("%s %s", field, definition.columnType)
-
-		if !definition.allowNull {
-			fieldDefinition += " NOT NULL"
-		}
-
-		if definition.autoIncrement {
-			fieldDefinition += " AUTO_INCREMENT"
-		}
-
-		if definition.primaryKey {
+		if parsedField.primaryKey {
 			primaryKey++
-			primaryKeyDefinition = fmt.Sprintf("PRIMARY KEY (%s)", field)
+			primaryKeyDefinition = parsedField.primaryKey
 		}
-		fieldDefinition += "\n"
-		fields += fieldDefinition
+
+		fields += parsedField.field
 	}
 
 	fields += primaryKeyDefinition
