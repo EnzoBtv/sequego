@@ -14,6 +14,7 @@ type Model struct {
 }
 
 //CreateTable Create a Database Table
+//TODO Create tests for this function
 func (table Model) CreateTable() error {
 	if Connection == nil || Connection.connection == nil {
 		return fmt.Errorf(`
