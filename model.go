@@ -18,15 +18,11 @@ type Model struct {
 //TODO Create tests for this function
 func (table Model) CreateTable() error {
 	if Connection == nil || Connection.connection == nil {
-		return fmt.Errorf(`
-			The connection with the database was not initialized yet. 
-			Call sequego.Connect(username, password, dataSource) to create a Connection`)
+		return fmt.Errorf("The connection with the database was not initialized yet. Call sequego.Connect(username, password, dataSource) to create a Connection")
 	}
 
 	if table.fields == nil {
-		return fmt.Errorf(`
-			You haven't set any fields for the model
-		`)
+		return fmt.Errorf("You haven't set any fields for the model")
 	}
 
 	primaryKey := 0
@@ -35,9 +31,6 @@ func (table Model) CreateTable() error {
 	primaryKeyDefinition := ""
 
 	for field, definition := range table.fields {
-		if primaryKey > 1 {
-			return fmt.Errorf("It was not possible to create table due to more than one primary key defined")
-		}
 		parsedField := parseFields(field, definition)
 
 		if parsedField.primaryKey != "" {
@@ -46,6 +39,10 @@ func (table Model) CreateTable() error {
 		}
 
 		fields += parsedField.field
+	}
+
+	if primaryKey > 1 {
+		return fmt.Errorf("It was not possible to create table due to more than one primary key defined")
 	}
 
 	fields += primaryKeyDefinition
