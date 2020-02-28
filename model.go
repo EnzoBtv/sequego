@@ -15,7 +15,6 @@ type Model struct {
 }
 
 //CreateTable Create a Database Table
-//TODO Create tests for this function
 func (table Model) CreateTable() error {
 	if Connection == nil || Connection.connection == nil {
 		return fmt.Errorf("The connection with the database was not initialized yet. Call sequego.Connect(username, password, dataSource) to create a Connection")
