@@ -11,6 +11,7 @@ import (
 type Model struct {
 	fields map[string]ModelOptions
 	name   string
+	err    error
 }
 
 //CreateTable Create a Database Table
@@ -20,6 +21,12 @@ func (table Model) CreateTable() error {
 		return fmt.Errorf(`
 			The connection with the database was not initialized yet. 
 			Call sequego.Connect(username, password, dataSource) to create a Connection`)
+	}
+
+	if table.fields == nil {
+		return fmt.Errorf(`
+			You haven't set any fields for the model
+		`)
 	}
 
 	primaryKey := 0
@@ -33,7 +40,7 @@ func (table Model) CreateTable() error {
 		}
 		parsedField := parseFields(field, definition)
 
-		if parsedField.primaryKey {
+		if parsedField.primaryKey != "" {
 			primaryKey++
 			primaryKeyDefinition = parsedField.primaryKey
 		}

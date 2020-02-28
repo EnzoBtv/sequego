@@ -33,7 +33,7 @@ func parseFields(field string, definition ModelOptions) returnParseFields {
 	if definition.primaryKey {
 		returnable.primaryKey = fmt.Sprintf("PRIMARY KEY (%s)", field)
 	}
-	fieldDefinition += "\n"
+	fieldDefinition += ",\n"
 	returnable.field = fieldDefinition
 
 	return *returnable
