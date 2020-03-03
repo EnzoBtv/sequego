@@ -20,6 +20,10 @@ func (table Model) CreateTable() error {
 		return fmt.Errorf("The connection with the database was not initialized yet. Call sequego.Connect(username, password, dataSource) to create a Connection")
 	}
 
+	if table.name == "" {
+		return fmt.Errorf("You haven't set a name for the model")
+	}
+
 	if table.fields == nil {
 		return fmt.Errorf("You haven't set any fields for the model")
 	}
@@ -64,16 +68,20 @@ func (table Model) CreateTable() error {
 //AddModelToConnection is a method of the struct Model and adds a model to the existing connection
 func (table Model) AddModelToConnection() error {
 	if Connection == nil {
-		fmt.Errorf("The connection with the database was not initialized yet. Call sequego.Connect(username, password, dataSource) to create a Connection")
+		return fmt.Errorf("The connection with the database was not initialized yet. Call sequego.Connect(username, password, dataSource) to create a Connection")
 	}
 
-	if m.fields == nil {
+	if table.name == "" {
+		return fmt.Errorf("You haven't set a name for the model")
+	}
+
+	if table.fields == nil {
 		return fmt.Errorf("You haven't set any fields for the model")
 	}
 
 	primaryKeyCounter := 0
 
-	for _, definition := range m.fields {
+	for _, definition := range table.fields {
 		if definition.primaryKey {
 			primaryKeyCounter++
 		}
@@ -83,5 +91,18 @@ func (table Model) AddModelToConnection() error {
 		return fmt.Errorf("It was not possible to create table due to more than one primary key defined")
 	}
 
-	Connection.models = append(Connection.models, m)
+	Connection.models = append(Connection.models, table)
+
+	return nil
+}
+
+//AddManyModelsToConnection just calls AddModelToConnection receiving an array
+func AddManyModelsToConnection(models []Model) error {
+	for _, model := range models {
+		err := model.AddModelToConnection()
+		if err != nil {
+			return fmt.Errorf("It was not possible to associate the model %s to the connection due to %v", model.name, err)
+		}
+	}
+	return nil
 }
