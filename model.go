@@ -60,3 +60,28 @@ func (table Model) CreateTable() error {
 
 	return nil
 }
+
+//AddModelToConnection is a method of the struct Model and adds a model to the existing connection
+func (table Model) AddModelToConnection() error {
+	if Connection == nil {
+		fmt.Errorf("The connection with the database was not initialized yet. Call sequego.Connect(username, password, dataSource) to create a Connection")
+	}
+
+	if m.fields == nil {
+		return fmt.Errorf("You haven't set any fields for the model")
+	}
+
+	primaryKeyCounter := 0
+
+	for _, definition := range m.fields {
+		if definition.primaryKey {
+			primaryKeyCounter++
+		}
+	}
+
+	if primaryKeyCounter > 1 {
+		return fmt.Errorf("It was not possible to create table due to more than one primary key defined")
+	}
+
+	Connection.models = append(Connection.models, m)
+}

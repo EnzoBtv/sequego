@@ -56,6 +56,7 @@ func Connect(username, password, dataSource, host string, port int) error {
 
 	Connection = &extendedDB{
 		connection: connection,
+		models:     make([]Model, 0),
 	}
 
 	return nil
