@@ -62,43 +62,11 @@ func TestCreateTable(t *testing.T) {
 		},
 	}
 
-	t.Run("No Connection Test", func(t *testing.T) {
-		test := Model{
-			name: "Test1",
-			fields: map[string]ModelOptions{
-				"id": {
-					allowNull:     false,
-					autoIncrement: true,
-					primaryKey:    true,
-					columnType:    "INT",
-				},
-				"name": {
-					allowNull:     false,
-					autoIncrement: false,
-					primaryKey:    false,
-					columnType:    "VARCHAR(255)",
-				},
-				"address": {
-					allowNull:     true,
-					autoIncrement: false,
-					primaryKey:    false,
-					columnType:    "VARCHAR(255)",
-				},
-			},
-			err: fmt.Errorf("The connection with the database was not initialized yet. Call sequego.Connect(username, password, dataSource) to create a Connection"),
-		}
-
-		err := test.CreateTable()
-
-		assert.Error(t, err)
-	})
-
 	Connect("root", "root", "sequego", "localhost", 3306)
 
 	for testName, test := range tests {
 		t.Run(testName, func(t *testing.T) {
 			err := test.CreateTable()
-
 			if test.err != nil {
 				assert.Equal(t, test.err, err)
 			}

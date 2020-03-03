@@ -19,10 +19,10 @@ type databaseConnectionTest struct {
 func TestConnect(t *testing.T) {
 	tests := []databaseConnectionTest{
 		{user: "root", password: "root", dataSource: "sequego", host: "127.0.0.1", port: 3306},
-		{user: "root", password: "rot", dataSource: "sequego", host: "127.0.0.1", port: 3306},
-		{user: "root", password: "root", dataSource: "seque", host: "127.0.0.1", port: 3306},
+		{user: "root", password: "rot", dataSource: "sequego", host: "127.0.0.1", port: 3306, err: fmt.Errorf("The access for the database has been denied, check your connection")},
+		{user: "root", password: "root", dataSource: "seque", host: "127.0.0.1", port: 3306, err: fmt.Errorf("The access for the database has been denied, check your connection")},
 		{user: "", password: "root", dataSource: "seque", host: "127.0.0.1", port: 3306, err: fmt.Errorf("The username (first parameter) is required")},
-		{user: "root", password: "", dataSource: "seque", host: "127.0.0.1", port: 3306},
+		{user: "root", password: "", dataSource: "seque", host: "127.0.0.1", port: 3306, err: fmt.Errorf("The access for the database has been denied, check your connection")},
 		{user: "root", password: "root", dataSource: "", host: "127.0.0.1", port: 3306, err: fmt.Errorf("The datasource (third parameter) is required")},
 		{user: "root", password: "root", dataSource: "sequego", host: "", port: 3306},
 		{user: "root", password: "root", dataSource: "sequego", host: "", port: 0},

@@ -48,6 +48,12 @@ func Connect(username, password, dataSource, host string, port int) error {
 		return fmt.Errorf("\nIt was not possible to connect with sql due to %v", err)
 	}
 
+	err = connection.Ping()
+
+	if err != nil {
+		return fmt.Errorf("The access for the database has been denied, check your connection")
+	}
+
 	Connection = &extendedDB{
 		connection: connection,
 	}
