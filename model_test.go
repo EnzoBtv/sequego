@@ -93,7 +93,7 @@ func TestCreateTable(t *testing.T) {
 		assert.Error(t, err)
 	})
 
-	Connect("root", "root", "sequego")
+	Connect("root", "root", "sequego", "localhost", 3306)
 
 	for testName, test := range tests {
 		t.Run(testName, func(t *testing.T) {

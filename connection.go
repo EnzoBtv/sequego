@@ -3,6 +3,7 @@ package sequego
 import (
 	"database/sql"
 	"fmt"
+	"strconv"
 
 	//Getting the mysql definitions
 	_ "github.com/go-sql-driver/mysql"
@@ -12,7 +13,7 @@ import (
 var Connection *extendedDB = nil
 
 // Connect connects with the specified database
-func Connect(username, password, dataSource string) error {
+func Connect(username, password, dataSource, host string, port int) error {
 	if username == "" {
 		return fmt.Errorf("The username (first parameter) is required")
 	}
@@ -25,7 +26,21 @@ func Connect(username, password, dataSource string) error {
 	if password != "" {
 		connectionString += ":" + password
 	}
-	connectionString += "@/" + dataSource
+
+	connectionString += "@"
+
+	if host != "" {
+		connectionString += "tcp(" + host
+
+		if port != 0 {
+			connectionString += ":" + strconv.Itoa(port)
+		} else {
+			connectionString += ":3306"
+		}
+		connectionString += ")"
+	}
+
+	connectionString += "/" + dataSource
 
 	connection, err := sql.Open("mysql", connectionString)
 
