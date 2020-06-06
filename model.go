@@ -34,7 +34,8 @@ func (table Model) CreateTable() error {
 	primaryKeyDefinition := ""
 
 	for field, definition := range table.fields {
-		parsedField := parseFields(field, definition)
+		parsedField := &Field{}
+		parsedField.parse(field, definition)
 
 		if parsedField.primaryKey != "" {
 			primaryKey++

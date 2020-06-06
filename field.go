@@ -12,14 +12,12 @@ type ModelOptions struct {
 	primaryKey    bool
 }
 
-type returnParseFields struct {
+type Field struct {
 	primaryKey string
 	field      string
 }
 
-func parseFields(field string, definition ModelOptions) returnParseFields {
-	returnable := &returnParseFields{}
-
+func (p *Field) parse(field string, definition ModelOptions) {
 	fieldDefinition := fmt.Sprintf("%s %s", field, definition.columnType)
 
 	if !definition.allowNull {
@@ -31,10 +29,8 @@ func parseFields(field string, definition ModelOptions) returnParseFields {
 	}
 
 	if definition.primaryKey {
-		returnable.primaryKey = fmt.Sprintf("PRIMARY KEY (%s)", field)
+		p.primaryKey = fmt.Sprintf("PRIMARY KEY (%s)", field)
 	}
 	fieldDefinition += ",\n"
-	returnable.field = fieldDefinition
-
-	return *returnable
+	p.field = fieldDefinition
 }
