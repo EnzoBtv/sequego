@@ -16,7 +16,7 @@ type Model struct {
 
 //CreateTable Create a Database Table
 func (table Model) CreateTable() error {
-	if Connection == nil || Connection.connection == nil {
+	if connection == nil || connection.connection == nil {
 		return fmt.Errorf("The connection with the database was not initialized yet. Call sequego.Connect(username, password, dataSource) to create a Connection")
 	}
 
@@ -51,7 +51,7 @@ func (table Model) CreateTable() error {
 
 	fields += primaryKeyDefinition
 
-	statement, err := Connection.connection.Prepare(fmt.Sprintf(`
+	statement, err := connection.connection.Prepare(fmt.Sprintf(`
 			CREATE TABLE IF NOT EXISTS %s (
 				%s
 			);
@@ -66,9 +66,9 @@ func (table Model) CreateTable() error {
 	return nil
 }
 
-//AddModelToConnection is a method of the struct Model and adds a model to the existing connection
-func (table Model) AddModelToConnection() error {
-	if Connection == nil {
+//AddToConnection is a method of the struct Model and adds a model to the existing connection
+func (table Model) AddToConnection() error {
+	if connection == nil {
 		return fmt.Errorf("The connection with the database was not initialized yet. Call sequego.Connect(username, password, dataSource) to create a Connection")
 	}
 
@@ -92,7 +92,7 @@ func (table Model) AddModelToConnection() error {
 		return fmt.Errorf("It was not possible to create table due to more than one primary key defined")
 	}
 
-	Connection.models = append(Connection.models, table)
+	connection.models = append(connection.models, table)
 
 	return nil
 }
@@ -100,7 +100,7 @@ func (table Model) AddModelToConnection() error {
 //AddManyModelsToConnection just calls AddModelToConnection receiving an array
 func AddManyModelsToConnection(models []Model) error {
 	for _, model := range models {
-		err := model.AddModelToConnection()
+		err := model.AddToConnection()
 		if err != nil {
 			return fmt.Errorf("It was not possible to associate the model %s to the connection due to %v", model.name, err)
 		}

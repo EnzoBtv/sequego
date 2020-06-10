@@ -12,6 +12,7 @@ type ModelOptions struct {
 	primaryKey    bool
 }
 
+// Field represents a field in the database
 type Field struct {
 	primaryKey string
 	field      string

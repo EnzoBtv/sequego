@@ -10,7 +10,7 @@ import (
 )
 
 // Connection stores a connection with a SQL Database
-var Connection *extendedDB = nil
+var connection *extendedDB = nil
 
 // Connect connects with the specified database
 func Connect(username, password, dataSource, host string, port int) error {
@@ -42,20 +42,20 @@ func Connect(username, password, dataSource, host string, port int) error {
 
 	connectionString += "/" + dataSource
 
-	connection, err := sql.Open("mysql", connectionString)
+	conn, err := sql.Open("mysql", connectionString)
 
 	if err != nil || connection == nil {
 		return fmt.Errorf("\nIt was not possible to connect with sql due to %v", err)
 	}
 
-	err = connection.Ping()
+	err = conn.Ping()
 
 	if err != nil {
 		return fmt.Errorf("The access for the database has been denied, check your connection")
 	}
 
-	Connection = &extendedDB{
-		connection: connection,
+	connection = &extendedDB{
+		connection: conn,
 		models:     make([]Model, 0),
 	}
 
